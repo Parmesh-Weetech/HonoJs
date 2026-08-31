@@ -1,8 +1,23 @@
 import { Hono } from 'hono';
 import { UserService } from '../services/user.service.js';
+import { authMiddleware } from '../middlewares/auth.middleware.js';
+import type { AppEnv } from '../types/context.js';
 
-const app = new Hono();
+const app = new Hono<AppEnv>();
 const userService = new UserService();
+
+app.get('/profile', authMiddleware, async (c) => {
+    try {
+        // Strongly-typed! c.get('user') returns AuthUser { id, email, name }
+        const user = c.get('user');
+
+        return c.json({
+            user,
+        });
+    } catch (error: any) {
+        return c.json({ error: error.message }, 404);
+    }
+});
 
 app.get('/', async (c) => {
     try {
@@ -54,4 +69,5 @@ app.delete('/:id', async (c) => {
     }
 });
 
+export const userRoute = app;
 export default app;

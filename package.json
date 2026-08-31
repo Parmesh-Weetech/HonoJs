@@ -12,10 +12,13 @@
   },
   "dependencies": {
     "@hono/node-server": "^2.1.1",
+    "@hono/zod-validator": "^0.4.3",
+    "bcryptjs": "^3.0.3",
     "dotenv": "^17.4.2",
     "drizzle-orm": "1.0.0-rc.4",
     "hono": "^4.13.5",
-    "pg": "^8.23.0"
+    "pg": "^8.23.0",
+    "zod": "^4.5.4"
   },
   "devDependencies": {
     "@types/node": "^26.1.1",

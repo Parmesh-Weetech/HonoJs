@@ -4,10 +4,13 @@ import "dotenv/config";
 import { sql } from 'drizzle-orm';
 import { db } from './db/db.js';
 import userRoute from './routes/user.route.js';
+import authRoute from './routes/auth.route.js';
+import type { AppEnv } from './types/context.js';
 
-export const app = new Hono()
+export const app = new Hono<AppEnv>()
 
 app.route('/user', userRoute);
+app.route('/auth', authRoute);
 
 serve({
   fetch: app.fetch,
