@@ -4,6 +4,7 @@ import { Hono } from 'hono'
 import userRoute from './routes/user.route.js';
 import dotenv from "dotenv";
 import { AppDataSource } from './config/database.js';
+import { env } from './helper/env.js';
 
 dotenv.config({ path: '.env' });
 
@@ -13,7 +14,7 @@ app.route('user', userRoute);
 
 serve({
   fetch: app.fetch,
-  port: 3000
+  port: env.PORT,
 }, (info) => {
   AppDataSource.initialize()
     .then(() => {
