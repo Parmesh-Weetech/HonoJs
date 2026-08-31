@@ -29,7 +29,11 @@ export class UserService {
     }
 
     async createUser(name: string, email: string) {
-        const existingUser = await this.userRepository.findOne({ where: { email } });
+        const existingUser = await this.userRepository.findOne({
+            where: {
+                email
+            }
+        });
 
         if(existingUser) {
             throw new Error("User with this email already exists");
@@ -40,5 +44,41 @@ export class UserService {
         await this.userRepository.save(user);
 
         return await this.getUserById(user.id);
+    }
+
+    async updateUser(id: string, name: string, email: string) {
+        const existingUser = await this.getUserById(id);
+
+        if(name) {
+            existingUser.name = name;
+        }
+
+        if(email) {
+            existingUser.email = email;
+        }
+
+        const saveNewUserData = await this.userRepository.save(existingUser);
+
+        if(!saveNewUserData) {
+            throw new Error("Failed to update user");
+        }
+
+        return await this.getUserById(existingUser.id);
+    }
+
+    async deleteUserById(id: string) {
+        const existingUser = await this.getUserById(id);
+
+        if(!existingUser) {
+            throw new Error("User not found");
+        }
+
+        const deleteUserData = await this.userRepository.delete(existingUser);
+
+        if(!deleteUserData) {
+            throw new Error("Failed to delete user");
+        }
+
+        return "User deleted successfully."
     }
 }
